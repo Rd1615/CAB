@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require('path');
 const dotenv = require('dotenv');
 const dbPromise = require("./lib/db.js");
 
@@ -21,7 +22,7 @@ dotenv.config();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL || "http://localhost:5173" ,
     credentials: true,
   })
 );
@@ -33,6 +34,17 @@ app.use("/api/auth", authRoutes);
 app.use("/api/driver",driverRoutes);
 app.use("/api/city",carRoute);
 app.use("api/cars",carList);
+
+   // ✅ Serve frontend in production
+  if (process.env.NODE_ENV === "production") {
+    const frontendPath = path.join(__dirname, "../frontend/dist");
+    app.use(express.static(frontendPath));
+
+    // ✅ Use regex instead of "/*" to avoid path-to-regexp errors
+    app.get(/.*/, (req, res) => {
+      res.sendFile(path.join(frontendPath, "index.html"));
+    });
+  }
 
 dbPromise
   .then(async (db) => {

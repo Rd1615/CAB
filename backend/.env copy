@@ -1,0 +1,11 @@
+# JWT_SECRET=mysecretKey
+
+# # for database 
+# DB_HOST=svc-3482219c-a389-4079-b18b-d50662524e8a-shared-dml.aws-virginia-6.svc.singlestore.com:3333
+# DB_USER=rahul-ee7ad
+# DB_PASSWORD=8M9lrV[CuZjz+M[r5hr$
+# DB_NAME=db_rahul_ffd32
+
+# PORT=5000
+
+# NODE_ENV=development
