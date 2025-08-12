@@ -1,9 +1,9 @@
-const dbPromise = require("../lib/db.js");
+const dbPromis = require("../lib/db.js");
 
 const driverModule = {
   createTableDriver: async () => {
     try {
-      const db = await dbPromise;
+      const db = await dbPromis;
       db.query(`
         CREATE TABLE IF NOT EXISTS driver (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -25,7 +25,7 @@ const driverModule = {
 
   createDriver: async ({ fullName, mobile, carName, carType, carNumber }) => {
     try {
-      const db = await dbPromise;
+      const db = await dbPromis;
       const [result] = await db.query(
         `INSERT INTO driver(fullName,mobile,carName,carType,carNumber) VALUES(?, ?, ?, ?, ?)`,
         [fullName, mobile, carName, carType, carNumber]
@@ -38,7 +38,7 @@ const driverModule = {
 
   getDriver: async () => {
     try {
-      const db = await dbPromise;
+      const db = await dbPromis;
       const [result] = await db.query(`SELECT * FROM driver`);
       return result;
     } catch (error) {
@@ -48,7 +48,7 @@ const driverModule = {
 
   getDriverByMobile: async (mobile) => {
     try {
-      const db = await dbPromise;
+      const db = await dbPromis;
       const [result] = await db.query(`SELECT * FROM driver WHERE mobile = ?`, [
         mobile,
       ]);
@@ -60,7 +60,7 @@ const driverModule = {
 
   getDriverById: async (id) => {
     try {
-    const db = await dbPromise;
+    const db = await dbPromis;
     const [rows] = await db.query("SELECT * FROM driver WHERE id = ?", [id]);
     return rows[0]; // return the first row (or null if not found)
   } catch (error) {
@@ -78,26 +78,26 @@ const driverModule = {
     carNumber,
   }) => {
     try {
-      const db = await dbPromise;
+      const db = await dbPromis;
       const [result] = await db.query(
         `UPDATE driver SET fullName = ?,mobile = ?,carName = ?,carType = ?,carNumber = ? WHERE id = ?`,
         [fullName, mobile, carName, carType, carNumber, id] // ✅ include id here
       );
-      return result.affectedRows; // Or return true/false based on success
+      return result.affectedRows;
     } catch (error) {
       console.error("Failed to update Driver:", error.message);
     }
   },
 
   deleteDriverById: async (id) => {
-  const db = await dbPromise;
+  const db = await dbPromis;
   const [result] = await db.query("DELETE FROM driver WHERE id = ?", [id]);
   return result;
 },
 
 updateDriverStatus: async (id, isActive) => {
   try {
-    const db = await dbPromise;
+    const db = await dbPromis;
     const [result] = await db.query(
       `UPDATE driver SET isActive = ? WHERE id = ?`,
       [isActive, id]

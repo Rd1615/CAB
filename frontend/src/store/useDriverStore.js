@@ -17,7 +17,7 @@ export const useDriverStore = create((set,get) => ({
   },
 
 //   Add New Driver
-  addDriver: async (driver,) => {
+  addDriver: async (driver) => {
     try {
         const res = await axiosInstance.post("driver/newdriver",driver);
         set((state) =>({

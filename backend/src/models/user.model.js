@@ -1,9 +1,9 @@
-const dbPromise = require("../lib/db.js");
+const dbPromis = require("../lib/db.js");
 
 const userModule = {
   createTableUsers: async () => {
     try {
-      const db = await dbPromise;
+      const db = await dbPromis;
       await db.query(`
         CREATE TABLE IF NOT EXISTS users (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -23,7 +23,7 @@ const userModule = {
 
   createUser: async ({ fullName, email, password,phone,location }) => {
     try {
-      const db = await dbPromise;
+      const db = await dbPromis;
       const [result] = await db.query(
         `INSERT INTO users (fullName, email, password, phone, location) VALUES (?, ?, ?, ?, ?)`,
         [fullName, email, password, phone, location]
@@ -36,7 +36,7 @@ const userModule = {
 
   getUserByEmail: async (email) => {
     try {
-      const db = await dbPromise;
+      const db = await dbPromis;
       const [rows] = await db.query(`SELECT * FROM users WHERE email = ?`, [email]);
       return rows[0];
     } catch (error) {
@@ -48,7 +48,7 @@ const userModule = {
   // ✅ Add this missing function
   getUserById: async (id) => {
     try {
-      const db = await dbPromise;
+      const db = await dbPromis;
       const [rows] = await db.query(`SELECT * FROM users WHERE id = ?`, [id]);
       return rows[0];
     } catch (error) {

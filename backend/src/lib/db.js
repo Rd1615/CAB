@@ -26,5 +26,5 @@ const DB_NAME = process.env.DB_NAME;
   return pool;
 };
 
-const dbPromise = db();
-module.exports = dbPromise;
+const dbPromis = db();
+module.exports = dbPromis;

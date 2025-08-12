@@ -1,9 +1,9 @@
-const dbPromise = require("../lib/db");
+const dbPromis = require("../lib/db");
 
 const carRouteModel = {
     createTableCarRoute: async () => {
         try {
-            const db = await dbPromise;
+            const db = await dbPromis;
             await db.query(`
                 CREATE TABLE IF NOT EXISTS carRoutes (
                     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -20,7 +20,7 @@ const carRouteModel = {
 
     createCity: async ({ city }) => {
     try {
-        const db = await dbPromise;
+        const db = await dbPromis;
         const [result] = await db.query(
             `INSERT INTO carRoutes (city) VALUES (?)`,
             [city]
@@ -28,7 +28,7 @@ const carRouteModel = {
 
         // fetch the newly created row
         const [rows] = await db.query(`SELECT * FROM carRoutes WHERE id = ?`, [result.insertId]);
-        return rows[0]; // returns full object
+        return rows[0];
     } catch (error) {
         console.log("Error creating city:", error.message);
     }
@@ -36,7 +36,7 @@ const carRouteModel = {
 
     getAllCity: async () => {
         try {
-            const db = await dbPromise;
+            const db = await dbPromis;
             const [result] = await db.query(`SELECT * FROM carRoutes`);
             return result;
         } catch (error) {
@@ -46,7 +46,7 @@ const carRouteModel = {
 
     deleteCity: async (id) => {
         try {
-            const db = await dbPromise;
+            const db = await dbPromis;
             const [result] = await db.query(
                 `DELETE FROM carRoutes WHERE id = ?`,
                 [id]
@@ -59,7 +59,7 @@ const carRouteModel = {
 
     updateToggleStatus: async (id) => {
     try {
-        const db = await dbPromise;
+        const db = await dbPromis;
         const [result] = await db.query(
             `UPDATE carRoutes SET isActive = NOT isActive WHERE id = ?`,
             [id]

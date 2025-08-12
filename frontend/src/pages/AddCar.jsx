@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Edit, Trash2, CheckCircle, XCircle } from "lucide-react";
+import { useCarStore } from "../store/useCarStore";
 
 const AddCarPage = () => {
-  const [cars, setCars] = useState([]);
+
+  const { carList,getAllCar,addNewCar,updateCar,carStatusChange,deleteCar} = useCarStore();
+  const[editId,setEditId] = useState(null);
+
   const [formData, setFormData] = useState({
     name: "",
     number: "",
@@ -10,6 +14,10 @@ const AddCarPage = () => {
     pricePerKm: "",
     isActive: true,
   });
+
+  useEffect(()=>{
+    getAllCar()
+  },[getAllCar]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -19,15 +27,32 @@ const AddCarPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.number || !formData.type || !formData.pricePerKm) return;
-    setCars((prev) => [
-      ...prev,
-      { id: prev.length + 1, ...formData },
-    ]);
+    // console.log(formData);
+    editId ? await updateCar(formData) : await addNewCar(formData)
     setFormData({ name: "", number: "", type: "", pricePerKm: "", isActive: true });
+    setEditId(null);
   };
+
+  const handleEdit = async (car) => {
+    setFormData({...car})
+    setEditId(car.id);
+  }
+
+  const handleDelete = (id) =>{
+    deleteCar(id);
+  }
+
+  const handleStatus = (id) => {
+    carStatusChange(id);
+  }
+
+  const cancelEdit = () => {
+    setFormData({ name: "", number: "", type: "", pricePerKm: "", isActive: true });
+    setEditId(null);
+  }
 
   return (
     <div className="p-6">
@@ -95,10 +120,11 @@ const AddCarPage = () => {
           </div>
 
           {/* Submit */}
-          <div className="flex items-center justify-center md:justify-start">
-            <button type="submit" className="btn btn-success w-full">
-              Add Car
+          <div className="form-control md:col-span-1 col-span-full flex flex-col md:flex-row items-center gap-4">
+            <button type="submit" className="btn btn-success w-full md:w-auto">
+              {editId ? "Update car" : "Add car"}
             </button>
+            {editId && <button type="button" onClick={cancelEdit} className="btn btn-outline w-full md:w-auto">Cancel</button>}
           </div>
         </form>
       </div>
@@ -119,7 +145,7 @@ const AddCarPage = () => {
             </tr>
           </thead>
           <tbody>
-            {cars.map((car, index) => (
+            {carList.map((car, index) => (
               <tr key={car.id}>
                 <td>{index + 1}</td>
                 <td>{car.id}</td>
@@ -128,23 +154,24 @@ const AddCarPage = () => {
                 <td>{car.number}</td>
                 <td>{car.pricePerKm}</td>
                 <td>
-                  {car.isActive ? (
-                    <CheckCircle className="text-yellow-500 w-5 h-5" />
-                  ) : (
-                    <XCircle className="text-gray-400 w-5 h-5" />
-                  )}
+                  <input
+                    type="checkbox"
+                    checked={!!car.isActive}
+                    onChange={() => handleStatus(car.id)}
+                    className="checkbox checkbox-primary"
+                  />
                 </td>
                 <td className="flex gap-2">
-                  <button className="text-blue-500">
+                  <button className="text-blue-500" onClick={() => handleEdit(car)}>
                     <Edit size={18} />
                   </button>
-                  <button className="text-red-500">
+                  <button className="text-red-500" onClick={() => handleDelete(car.id)}>
                     <Trash2 size={18} />
                   </button>
                 </td>
               </tr>
             ))}
-            {cars.length === 0 && (
+            {carList.length === 0 && (
               <tr>
                 <td colSpan="8" className="text-center py-4 text-gray-500">
                   No cars added yet.

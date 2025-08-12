@@ -24,7 +24,6 @@ const CityList = () => {
   };
 
   const toggleStatus = async (id) => {
-    console.log("id :", id);
     updateCityStatus(id);
   };
 
