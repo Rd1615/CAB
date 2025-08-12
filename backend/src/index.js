@@ -19,7 +19,6 @@ const carListmodel = require("./models/carList.model.js");
 const PORT = 5000;
 const app = express();
 dotenv.config();
-
 app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173" ,
